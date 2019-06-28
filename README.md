@@ -1,5 +1,8 @@
-<<<<<<< HEAD
 # GeoPins
 =======
 
->>>>>>> 3e7cee7ffb104678220aec920446bdbf81880bbf
+```
+const codeBlock = () => {
+  console.log('Does it work?');
+}
+```
