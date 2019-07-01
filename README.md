@@ -9,108 +9,108 @@ const codeBlock = () => {
 
 --------------------------------------------
 
-## Section 2: Building our GraphQL Server
+### Section 2: Building our GraphQL Server
 
-### 4. Creating our GraphQL Server
-### 5. Creating Database with MongoDB Atlas
-### 6. Creating Mongoose Models for User / Pin Data
+4. Creating our GraphQL Server
+5. Creating Database with MongoDB Atlas
+6. Creating Mongoose Models for User / Pin Data
 
-## Section 3: Social Login with Google OAuth 2.0
+### Section 3: Social Login with Google OAuth 2.0
 
 7. Exploring our React App
 8. Setting up Google OAuth
 9. Adding Google Login Button
 10. Authenticating Users from Apollo Server
 
-Section 4: Managing App State with useReducer / userContext Hooks
+### Section 4: Managing App State with useReducer / userContext Hooks
 
 11. Managing App State with useContext / useReducer
 12. Styling Splash Page / App Cleanup
 
-Section 5: Protecting Our App Route
+### Section 5: Protecting Our App Route
 
 13. Creating Protected Route for App
 
 --------------------------------------------
 
-Section 6: Building the Header
+### Section 6: Building the Header
 
 14. Building Header Component
 15. Build Signout Button
 
-Section 7: Building the Map / User Geolocation
+### Section 7: Building the Map / User Geolocation
 
 16. Creating and Styling our Map
 17. Placing a Pin at User's Current Position
 
-Section 8: Creating Blog Area / Adding Draft Pins
+### Section 8: Creating Blog Area / Adding Draft Pins
 
 18. Adding Draft Pin
 19. Adding Blog Area for Pin Content
 20. Building / Styling Blog Components
 21. Managing Pin Content State and Deleting Draft Pins
 
-Section 9: Image Uploads with Cloudinary Web API
+### Section 9: Image Uploads with Cloudinary Web API
 
 22. Uploading Images with Cloudinary
 
 --------------------------------------------
 
-Section 10: Creating New User Pins
+### Section 10: Creating New User Pins
 
 23. Creating New Pins with CREATE_PIN Mutation
 
-Section 11: Making Costom useClient Hook
+### Section 11: Making Costom useClient Hook
 
 24. Create Costom GraphQL Request Hook
 
-Section 12: Getting / Displaying Created Pins
+### Section 12: Getting / Displaying Created Pins
 
 25. Displaying Created Pins on the Map
 
-Section 13: Popups and Highlighting New Pins
+### Section 13: Popups and Highlighting New Pins
 
 26. Highlighting Newly Created Pins
 27. Adding Popup to our Pins
 
-Section 14: Deleting User Pins
+### Section 14: Deleting User Pins
 
 28. Deleting Pins with DELETE_PIN Mutation
 
-Section 15: Displaying Pin Content
+### Section 15: Displaying Pin Content
 
 29. Building Out / Styling Pin Content
 
-Section 16: Add Comment Function ality
+### Section 16: Add Comment Function ality
 
 30. Building out Components to Create / Display User Comments
 31. Creating Comments with CREATE_COMMENT_MUTATION
 
 --------------------------------------------
 
-Section 17: Client Error Handling
+### Section 17: Client Error Handling
 
 32. Hanlding Expired Auth Token Errors
 
-Section 18: Live Data with GraphQL Subscriptions / Apollo Client
+### Section 18: Live Data with GraphQL Subscriptions / Apollo Client
 
 33. Setting up Subscriptions on the Backend
 34. Subscribing to Live Data Changes with Apollo Client
 
 --------------------------------------------
 
-Section 19: Styling our App for Mobile / useMediaQuery
+### Section 19: Styling our App for Mobile / useMediaQuery
 
 35. useMediaQuery for Easy Mobile / Response Design
 
-Section 20: Improving our App / Fixing App Issues
+### Section 20: Improving our App / Fixing App Issues
 
 36. Fixing App Issues
 
-Section 21: Deploying our App
+### Section 21: Deploying our App
 
 37. Deploying with Now v2 and Heroku
 
-Section 22: BONUS
+### Section 22: BONUS
 
 38. Bonus Lecture
