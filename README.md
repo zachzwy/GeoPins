@@ -7,11 +7,62 @@ const codeBlock = () => {
 }
 ```
 
---------------------------------------------
+## Part 1: Prepare
 
 ### Section 2: Building our GraphQL Server
 
 4. Creating our GraphQL Server
+
+server.js
+```javascript
+const { ApolloServer } = require('apollo-server');
+
+const typeDefs = require('./typeDefs');
+const resolvers = require('./resolvers');
+require('dotenv').config();
+
+const server = new ApolloServer({
+  typeDefs: typeDefs,
+  resolvers: resolvers
+});
+
+server.listen().then(({ url }) => console.log(`Server listening on ${url}`));
+```
+
+typeDefs.js
+```javascript
+const { gql } = require('apollo-server');
+
+module.exports = gql`
+  type User {
+    _id: ID,
+    name: String,
+    email: String,
+    picture: String
+  }
+
+  type Query {
+    me: User
+  }
+`
+```
+
+resolvers.js
+```javascript
+const user = {
+  _id: "1",
+  name: "Zach",
+  email: "zachzwy@gmail.com",
+  picture: "https://cloudinary.com/asdf"
+}
+
+module.exports = {
+  Query: {
+    me: () => user
+  }
+};
+```
+
 5. Creating Database with MongoDB Atlas
 6. Creating Mongoose Models for User / Pin Data
 
@@ -31,7 +82,7 @@ const codeBlock = () => {
 
 13. Creating Protected Route for App
 
---------------------------------------------
+## Part 2: Feature
 
 ### Section 6: Building the Header
 
@@ -54,7 +105,7 @@ const codeBlock = () => {
 
 22. Uploading Images with Cloudinary
 
---------------------------------------------
+## Part 3: More Feature
 
 ### Section 10: Creating New User Pins
 
@@ -86,7 +137,7 @@ const codeBlock = () => {
 30. Building out Components to Create / Display User Comments
 31. Creating Comments with CREATE_COMMENT_MUTATION
 
---------------------------------------------
+## Part 4: Subscription
 
 ### Section 17: Client Error Handling
 
@@ -97,7 +148,7 @@ const codeBlock = () => {
 33. Setting up Subscriptions on the Backend
 34. Subscribing to Live Data Changes with Apollo Client
 
---------------------------------------------
+## Part 5: Styling
 
 ### Section 19: Styling our App for Mobile / useMediaQuery
 
