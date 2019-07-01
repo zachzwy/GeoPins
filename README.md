@@ -1,11 +1,7 @@
 # GeoPins
 =======
-
-```javascript
-const codeBlock = () => {
-  console.log('Does it work?');
-}
-```
+Run following to start the app
+$ npm run dev
 
 ## Part 1: Prepare
 
@@ -64,6 +60,29 @@ module.exports = {
 ```
 
 5. Creating Database with MongoDB Atlas
+.env
+```javascript
+MONGO_URI=mongodb+srv://wenyuzhang:wenyuzhang@geopin-ohtej.mongodb.net/test?retryWrites=true&w=majority
+```
+
+server.js
+```javascript
+// ...
+const mongoose = require('mongoose');
+require('dotenv').config();
+
+// ...
+
+mongoose
+  .connect(process.env.MONGO_URI, {
+  useNewUrlParser: true
+})
+  .then(() => console.log('DB connected!'))
+  .catch(e => console.error(e));
+  
+// ...
+```
+
 6. Creating Mongoose Models for User / Pin Data
 
 ### Section 3: Social Login with Google OAuth 2.0
