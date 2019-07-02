@@ -188,6 +188,49 @@ OAUTH_CLIENT_ID=29144684875-ofvjb22rtvd1t90bn0db34d91r4l2e84.apps.googleusercont
 ```
 
 **9. Adding Google Login Button**
+
+src/pages/Splash.js
+```javascript
+import React from "react";
+
+import Login from "../components/Auth/Login"; 
+
+const Splash = () => {
+  return <Login />;
+};
+
+export default Splash;
+```
+
+src/components/Auth/Login.js
+```javascript
+// ...
+
+import { GoogleLogin } from "react-google-login";
+
+// ...
+
+const Login = ({ classes }) => {
+  const onSuccess = googleUser => {
+    const id_token = googleUser.getAuthResponse().id_token;
+    console.log(id_token);
+  };
+
+  const onFailure = () => console.log("Login failed");
+
+  return (
+    <GoogleLogin
+      clientId='29144684875-ofvjb22rtvd1t90bn0db34d91r4l2e84.apps.googleusercontent.com'
+      onSuccess={onSuccess}
+      onFailure={onFailure}
+      isSignedIn={true}
+    />
+  );
+};
+
+// ...
+```
+
 **10. Authenticating Users from Apollo Server**
 
 ### Section 4: Managing App State with useReducer / userContext Hooks
