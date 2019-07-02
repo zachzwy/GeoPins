@@ -59,7 +59,9 @@ module.exports = {
 
 **5. Creating Database with MongoDB Atlas**
 
-Create account on MongoDB
+Create an account on MongoDB
+
+Create a new file called .env
 
 .env
 ```javascript
@@ -165,100 +167,118 @@ module.exports = mongoose.model('Pin', PinSchema);
 
 ### Section 3: Social Login with Google OAuth 2.0
 
-7. Exploring our React App
-8. Setting up Google OAuth
-9. Adding Google Login Button
-10. Authenticating Users from Apollo Server
+**7. Exploring our React App**
+
+When you're inside client folder, run
+
+$ npm run dev
+
+**8. Setting up Google OAuth**
+
+Login to concole.developer.google.com. Create a new project, enable Google+ API.
+Create credentials.
+
+Add client ID to the .env file
+
+.env
+```javascript
+//...
+
+OAUTH_CLIENT_ID=29144684875-ofvjb22rtvd1t90bn0db34d91r4l2e84.apps.googleusercontent.com
+```
+
+**9. Adding Google Login Button**
+**10. Authenticating Users from Apollo Server**
 
 ### Section 4: Managing App State with useReducer / userContext Hooks
 
-11. Managing App State with useContext / useReducer
-12. Styling Splash Page / App Cleanup
+**11. Managing App State with useContext / useReducer**
+**12. Styling Splash Page / App Cleanup**
 
 ### Section 5: Protecting Our App Route
 
-13. Creating Protected Route for App
+**13. Creating Protected Route for App**
 
 ## Part 2: Feature
 
 ### Section 6: Building the Header
 
-14. Building Header Component
-15. Build Signout Button
+**14. Building Header Component**
+**15. Build Signout Button**
 
 ### Section 7: Building the Map / User Geolocation
 
-16. Creating and Styling our Map
-17. Placing a Pin at User's Current Position
+**16. Creating and Styling our Map**
+**17. Placing a Pin at User's Current Position**
 
 ### Section 8: Creating Blog Area / Adding Draft Pins
 
-18. Adding Draft Pin
-19. Adding Blog Area for Pin Content
-20. Building / Styling Blog Components
-21. Managing Pin Content State and Deleting Draft Pins
+**18. Adding Draft Pin**
+**19. Adding Blog Area for Pin Content**
+**20. Building / Styling Blog Components**
+**21. Managing Pin Content State and Deleting Draft Pins**
 
 ### Section 9: Image Uploads with Cloudinary Web API
 
-22. Uploading Images with Cloudinary
+**22. Uploading Images with Cloudinary**
 
 ## Part 3: More Feature
 
 ### Section 10: Creating New User Pins
 
-23. Creating New Pins with CREATE_PIN Mutation
+**23. Creating New Pins with CREATE_PIN Mutation**
 
 ### Section 11: Making Costom useClient Hook
 
-24. Create Costom GraphQL Request Hook
+**24. Create Costom GraphQL Request Hook**
 
 ### Section 12: Getting / Displaying Created Pins
 
-25. Displaying Created Pins on the Map
+**25. Displaying Created Pins on the Map**
 
 ### Section 13: Popups and Highlighting New Pins
 
-26. Highlighting Newly Created Pins
-27. Adding Popup to our Pins
+**26. Highlighting Newly Created Pins**
+**27. Adding Popup to our Pins**
 
 ### Section 14: Deleting User Pins
 
-28. Deleting Pins with DELETE_PIN Mutation
+**28. Deleting Pins with DELETE_PIN Mutation**
 
 ### Section 15: Displaying Pin Content
 
-29. Building Out / Styling Pin Content
+**29. Building Out / Styling Pin Content**
 
 ### Section 16: Add Comment Function ality
 
-30. Building out Components to Create / Display User Comments
-31. Creating Comments with CREATE_COMMENT_MUTATION
+**30. Building out Components to Create / Display User Comments**
+**31. Creating Comments with CREATE_COMMENT_MUTATION**
 
 ## Part 4: Subscription
 
 ### Section 17: Client Error Handling
 
-32. Hanlding Expired Auth Token Errors
+**32. Hanlding Expired Auth Token Errors**
 
 ### Section 18: Live Data with GraphQL Subscriptions / Apollo Client
 
-33. Setting up Subscriptions on the Backend
-34. Subscribing to Live Data Changes with Apollo Client
+**33. Setting up Subscriptions on the Backend**
+**34. Subscribing to Live Data Changes with Apollo Client**
 
 ## Part 5: Styling
 
 ### Section 19: Styling our App for Mobile / useMediaQuery
 
-35. useMediaQuery for Easy Mobile / Response Design
+**35. useMediaQuery for Easy Mobile / Response Design**
 
 ### Section 20: Improving our App / Fixing App Issues
 
-36. Fixing App Issues
+**36. Fixing App Issues**
 
 ### Section 21: Deploying our App
 
-37. Deploying with Now v2 and Heroku
+**37. Deploying with Now v2 and Heroku**
 
 ### Section 22: BONUS
 
-38. Bonus Lecture
+**38. Bonus Lecture**
