@@ -450,6 +450,33 @@ const Login = ({ classes }) => {
 
 **12. Styling Splash Page / App Cleanup**
 
+Login.js
+```javascript
+const Login = ({ classes }) => {
+  
+  // ...
+
+  return (
+    <div className={classes.root}>
+      <Typography
+        component='h1'
+        variant='h3'
+        gutterBottom
+        noWrap
+        style={{ color: 'rgb(66, 133, 244)' }}
+      >
+        Welcome
+      </Typography>
+      
+      {//...}
+
+    </div>
+  );
+};
+```
+
+Move ME_QUERY to src/graphql/queries.js
+
 ### Section 5: Protecting Our App Route
 
 **13. Creating Protected Route for App**

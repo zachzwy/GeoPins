@@ -3,18 +3,8 @@ import { GoogleLogin } from "react-google-login";
 import { GraphQLClient } from 'graphql-request';
 import { withStyles } from "@material-ui/core/styles";
 import Context from "../../context";
-// import Typography from "@material-ui/core/Typography";
-
-const ME_QUERY = `
-{
-  me {
-		_id,
-    name,
-    email,
-    picture
-  }
-}
-`;
+import { ME_QUERY } from "../../graphql/queries";
+import Typography from "@material-ui/core/Typography";
 
 const Login = ({ classes }) => {
   
@@ -26,22 +16,33 @@ const Login = ({ classes }) => {
       headers: { authorization: id_token }
     });
     const data = await client.request(ME_QUERY);
-    // console.log({ data });
     dispatch({
       type: 'LOGIN_USER',
       payload: data.me
     })
   };
 
-  const onFailure = response => console.log(response);
+  const onFailure = err => console.error('Error logging in', err);
 
   return (
-    <GoogleLogin
-      clientId='29144684875-ofvjb22rtvd1t90bn0db34d91r4l2e84.apps.googleusercontent.com'
-      onSuccess={onSuccess}
-      onFailure={onFailure}
-      isSignedIn={true}
-    />
+    <div className={classes.root}>
+      <Typography
+        component='h1'
+        variant='h3'
+        gutterBottom
+        noWrap
+        style={{ color: 'rgb(66, 133, 244)' }}
+      >
+        Welcome
+      </Typography>
+      <GoogleLogin
+        clientId='29144684875-ofvjb22rtvd1t90bn0db34d91r4l2e84.apps.googleusercontent.com'
+        onSuccess={onSuccess}
+        onFailure={onFailure}
+        isSignedIn={true}
+        theme='dark'
+      />
+    </div>
   );
 };
 
