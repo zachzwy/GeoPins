@@ -233,6 +233,136 @@ const Login = ({ classes }) => {
 
 **10. Authenticating Users from Apollo Server**
 
+It means sending over this ID token to our server checking
+to see if it's valid, getting the user's Google information there
+and then when we execute a query from the client asking for the
+current user's information we'll send it back from the server
+upon which we'll store that information in our app and redirect them
+to the app component.
+
+src/components/Auth/Login.js
+```javascript
+// ...
+
+import { GraphQLClient } from 'graphql-request';
+
+// ...
+
+const ME_QUERY = `
+{
+  me {
+		_id,
+    name,
+    email,
+    picture
+  }
+}
+`;
+
+// ...
+
+const Login = ({ classes }) => {
+  const onSuccess = async googleUser => {
+
+    // ...
+
+    const client = new GraphQLClient('http://localhost:4000/graphql', {
+      headers: { authorization: id_token }
+    });
+    const data = await client.request(ME_QUERY);
+    console.log({ data });
+  };
+
+  // ...
+};
+
+```
+
+server.js
+```javascript
+const { findOrCreateUser } = require('./controllers/userController');
+
+const server = new ApolloServer({
+  
+  // ...
+  
+  context: async ({ req }) => {
+    let authToken = null;
+    let currentUser = null;
+    try {
+      authToken = req.headers.authorization;
+      if (authToken) {
+        // find or create user
+        currentUser = await findOrCreateUser(authToken);
+      }
+    } catch (err) {
+      console.error(`Unable to authenticate user with token ${authToken}`);
+    }
+    return { currentUser };
+  }
+});
+```
+
+Create a new file userController.js under the folder controllers
+
+userController.js
+```javascript
+const User = require('../models/User');
+const { OAuth2Client } = require('google-auth-library');
+
+const client = new OAuth2Client(process.env.OAUTH_CLIENT_ID);
+
+exports.findOrCreateUser = async token => {
+  // verify auth token
+  const googleUser = await verifyAuthToken(token);
+  // check if the user exists
+  const user = await checkIfUserExists(googleUser.email);
+  // if user exists,return them; otherwise, create a new user
+  return user ? user : createNewUser(googleUser);
+}
+
+const verifyAuthToken = async token => {
+  try {
+    const ticket = await client.verifyIdToken({
+      idToken: token,
+      audience: process.env.OAUTH_CLIENT_ID
+    });
+    return ticket.getPayload();
+  } catch (err) {
+    console.error('Error verifying auth token', err);
+  }
+};
+
+const checkIfUserExists = async email => await User.findOne({ email }).exec();
+
+const createNewUser = googleUser => {
+  const { name, email, picture } = googleUser;
+  const user = { name, email, picture };
+  return new User(user).save();
+}
+```
+
+resolvers.js
+```javascript
+const { AuthenticationError } = require('apollo-server');
+
+// ...
+
+const authenticated = next => (root, args, ctx, info) => {
+  if (!ctx.currentUser) {
+    throw new AuthenticationError('You must be logged in.')
+  }
+  return next(root, args, ctx, info);
+}
+
+module.exports = {
+  Query: {
+    me: authenticated((root, args, ctx) => ctx.currentUser)
+  }
+};
+```
+
+
 ### Section 4: Managing App State with useReducer / userContext Hooks
 
 **11. Managing App State with useContext / useReducer**
