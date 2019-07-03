@@ -19,7 +19,11 @@ const Login = ({ classes }) => {
     dispatch({
       type: 'LOGIN_USER',
       payload: data.me
-    })
+    });
+    dispatch({
+      type: 'IS_LOGGED_IN',
+      payload: googleUser.isSignedIn
+    });
   };
 
   const onFailure = err => console.error('Error logging in', err);

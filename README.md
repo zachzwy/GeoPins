@@ -481,6 +481,103 @@ Move ME_QUERY to src/graphql/queries.js
 
 **13. Creating Protected Route for App**
 
+reducer.js
+```javascript
+const reducer = (state, action) => {
+  switch (action.type) {
+    // ...
+
+    case 'IS_LOGGED_IN':
+      return {
+        ...state,
+        isAuth: action.payload
+      }
+
+    // ...
+  }
+}
+
+```
+
+context.js
+```javascript
+// ...
+const Context = createContext({
+  // ...
+  isAuth: false
+});
+// ...
+
+```
+
+Login.js
+```javascript
+const Login = ({ classes }) => {
+  // ....
+  const onSuccess = async googleUser => {
+    // ...
+    dispatch({
+      type: 'IS_LOGGED_IN',
+      payload: googleUser.isSignedIn
+    });
+  };
+  // ...
+}
+```
+
+Splash.js
+```javascript
+// ...
+import { Redirect } from "react-router-dom";
+import Context from "../context";
+
+const Splash = () => {
+  const { state } = useContext(Context);
+  // If user is logged in, redirect to app page
+  return state.isAuth ? <Redirect to='/' /> : <Login />;
+};
+
+// ...
+```
+
+Create a new file called ProtectedRoute.js under src folder
+
+ProtectedRoute.js
+```javascript
+import React, { useContext } from "react";
+import { Route } from "react-router-dom";
+import Context from "./context";
+import Redirect from "react-router-dom/Redirect";
+
+const ProtectedRoute = ({ component: Component, ...rest }) => {
+  const { state } = useContext(Context);
+  return (
+    <Route render={props =>
+      !state.isAuth ? <Redirect to='/login' /> : <Component {...props} />}
+    {...rest} />
+  );
+}
+
+export default ProtectedRoute;
+```
+
+index.js
+```javascript
+const Root = () => {
+  // ...
+  return (
+    <Router>
+      <Context.Provider value={{ state, dispatch }}>
+        <Switch>
+          <ProtectedRoute exact path="/" component={App} />
+          <Route path="/login" component={Splash} />
+        </Switch>
+      </Context.Provider>
+    </Router>
+  );
+};
+```
+
 ## Part 2: Feature
 
 ### Section 6: Building the Header
