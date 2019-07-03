@@ -338,7 +338,7 @@ const checkIfUserExists = async email => await User.findOne({ email }).exec();
 const createNewUser = googleUser => {
   const { name, email, picture } = googleUser;
   const user = { name, email, picture };
-  return new User(user).save();
+  return new User(user).save(); // Add a new User to database
 }
 ```
 
@@ -362,10 +362,92 @@ module.exports = {
 };
 ```
 
-
 ### Section 4: Managing App State with useReducer / userContext Hooks
 
 **11. Managing App State with useContext / useReducer**
+
+Create a new file under client/src, called context.js
+
+client/src/context.js
+```javascript
+import { createContext } from 'react';
+
+const Context = createContext({
+  currentUser: null
+});
+
+export default Context;
+```
+
+client/src/index.js
+```javascript
+import React, { useContext, useReducer } from "react";
+
+// ...
+
+import Context from "./context";
+import reducer from "./reducer";
+
+// ...
+
+const Root = () => {
+  const initialState = useContext(Context);
+  const [state, dispatch] = useReducer(reducer, initialState);
+
+  return (
+    <Router>
+      <Context.Provider value={{ state, dispatch }}>
+        <Switch>
+          <Route exact path="/" component={App} />
+          <Route path="/login" component={Splash} />
+        </Switch>
+      </Context.Provider>
+    </Router>
+  );
+};
+```
+
+Create a new file called reducer.js under client/src
+
+client/src/reducer.js
+```javascript
+const reducer = (state, action) => {
+  switch (action.type) {
+    case 'LOGIN_USER':
+      return {
+        ...state,
+        currentUser: action.payload
+      }
+    default:
+      return state;
+  }
+}
+
+export default reducer;
+```
+
+client/src/component/Auth/Login.js
+```javascript
+import React, { useContext } from "react";
+import Context from "../../context";
+// ...
+
+const Login = ({ classes }) => {
+  
+  const { dispatch } = useContext(Context);
+
+  const onSuccess = async googleUser => {
+    // ...
+    dispatch({
+      type: 'LOGIN_USER',
+      payload: data.me
+    })
+  };
+
+  // ...
+};
+```
+
 **12. Styling Splash Page / App Cleanup**
 
 ### Section 5: Protecting Our App Route
