@@ -11,6 +11,13 @@ import * as serviceWorker from "./serviceWorker";
 import ProtectedRoute from "./ProtectedRoute";
 
 const Root = () => {
+  // useContext accepts a context object (the value returned from React.createContext)
+  // and returns the current context value for that context.
+  // The current context value is determined by the value prop
+  // of the nearest <MyContext.Provider> above the calling component in the tree.
+
+  // If there is no <MyContext.Provider> above the calling component,
+  // looks like useContext(Context) will return the value passed in React.createContext
   const initialState = useContext(Context);
   const [state, dispatch] = useReducer(reducer, initialState);
 

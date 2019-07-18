@@ -1,6 +1,6 @@
 # GeoPins
 
-$ npm run dev
+\$ npm run dev
 
 ## Part 1: Prepare
 
@@ -9,11 +9,12 @@ $ npm run dev
 **4. Creating our GraphQL Server**
 
 server.js
-```javascript
-const { ApolloServer } = require('apollo-server');
 
-const typeDefs = require('./typeDefs');
-const resolvers = require('./resolvers');
+```javascript
+const { ApolloServer } = require("apollo-server");
+
+const typeDefs = require("./typeDefs");
+const resolvers = require("./resolvers");
 
 const server = new ApolloServer({
   typeDefs: typeDefs,
@@ -24,31 +25,34 @@ server.listen().then(({ url }) => console.log(`Server listening on ${url}`));
 ```
 
 typeDefs.js
+
 ```javascript
-const { gql } = require('apollo-server');
+const { gql } = require("apollo-server");
 
 module.exports = gql`
   type User {
-    _id: ID,
-    name: String,
-    email: String,
+    _id: ID
+    name: String
+    email: String
     picture: String
   }
 
   type Query {
     me: User
   }
-`
+`;
 ```
 
 resolvers.js
+
 ```javascript
-const user = { // Create a fake data
+const user = {
+  // Create a fake data
   _id: "1",
   name: "Zach",
   email: "zachzwy@gmail.com",
   picture: "https://cloudinary.com/asdf"
-}
+};
 
 module.exports = {
   Query: {
@@ -64,24 +68,26 @@ Create an account on MongoDB
 Create a new file called .env
 
 .env
+
 ```javascript
 MONGO_URI=mongodb+srv://wenyuzhang:wenyuzhang@geopin-ohtej.mongodb.net/test?retryWrites=true&w=majority
 ```
 
 server.js
+
 ```javascript
 // ...
 
-const mongoose = require('mongoose');
-require('dotenv').config();
+const mongoose = require("mongoose");
+require("dotenv").config();
 
 // ...
 
 mongoose
   .connect(process.env.MONGO_URI, {
-  useNewUrlParser: true
-})
-  .then(() => console.log('DB connected!'))
+    useNewUrlParser: true
+  })
+  .then(() => console.log("DB connected!"))
   .catch(e => console.error(e));
 
 // ...
@@ -98,8 +104,9 @@ Under **models** folder, create a new file called User.js,
 inside this new file, create a UserSchema
 
 User.js
+
 ```javascript
-const mongoose = require('mongoose');
+const mongoose = require("mongoose");
 
 const UserSchema = new mongoose.Schema({
   name: String,
@@ -115,6 +122,7 @@ module.exports = mongoose.model("User", UserSchema);
 Add new Pin data in typeDefs.js
 
 typeDefs.js
+
 ```javascript
 // ...
 
@@ -143,26 +151,30 @@ Under **models** folder, create a new file called Pin.js,
 inside this new file, create a PinSchema
 
 Pin.js
+
 ```javascript
-const mongoose = require('mongoose');
+const mongoose = require("mongoose");
 
-const PinSchema = new mongoose.Schema({
-  title: String,
-  content: String,
-  image: String,
-  latitude: Number,
-  longitude: Number,
-  author: { type: mongoose.Schema.ObjectId, ref: 'User'},
-  comments: [
-    {
-      text: String,
-      createdAt: { type: Date, default: Date.now },
-      author: { type: mongoose.Schema.ObjectId, ref: 'User'}
-    }
-  ]
-}, { timestamps: true });
+const PinSchema = new mongoose.Schema(
+  {
+    title: String,
+    content: String,
+    image: String,
+    latitude: Number,
+    longitude: Number,
+    author: { type: mongoose.Schema.ObjectId, ref: "User" },
+    comments: [
+      {
+        text: String,
+        createdAt: { type: Date, default: Date.now },
+        author: { type: mongoose.Schema.ObjectId, ref: "User" }
+      }
+    ]
+  },
+  { timestamps: true }
+);
 
-module.exports = mongoose.model('Pin', PinSchema);
+module.exports = mongoose.model("Pin", PinSchema);
 ```
 
 ### Section 3: Social Login with Google OAuth 2.0
@@ -171,7 +183,7 @@ module.exports = mongoose.model('Pin', PinSchema);
 
 When you're inside client folder, run
 
-$ npm run dev
+\$ npm run dev
 
 **8. Setting up Google OAuth**
 
@@ -181,19 +193,22 @@ Create credentials.
 Add client ID to the .env file
 
 .env
+
 ```javascript
 //...
 
-OAUTH_CLIENT_ID=29144684875-ofvjb22rtvd1t90bn0db34d91r4l2e84.apps.googleusercontent.com
+OAUTH_CLIENT_ID =
+  29144684875 - ofvjb22rtvd1t90bn0db34d91r4l2e84.apps.googleusercontent.com;
 ```
 
 **9. Adding Google Login Button**
 
 src/pages/Splash.js
+
 ```javascript
 import React from "react";
 
-import Login from "../components/Auth/Login"; 
+import Login from "../components/Auth/Login";
 
 const Splash = () => {
   return <Login />;
@@ -203,6 +218,7 @@ export default Splash;
 ```
 
 src/components/Auth/Login.js
+
 ```javascript
 // ...
 
@@ -220,7 +236,7 @@ const Login = ({ classes }) => {
 
   return (
     <GoogleLogin
-      clientId='29144684875-ofvjb22rtvd1t90bn0db34d91r4l2e84.apps.googleusercontent.com'
+      clientId="29144684875-ofvjb22rtvd1t90bn0db34d91r4l2e84.apps.googleusercontent.com"
       onSuccess={onSuccess}
       onFailure={onFailure}
       isSignedIn={true}
@@ -241,10 +257,11 @@ upon which we'll store that information in our app and redirect them
 to the app component.
 
 src/components/Auth/Login.js
+
 ```javascript
 // ...
 
-import { GraphQLClient } from 'graphql-request';
+import { GraphQLClient } from "graphql-request";
 
 // ...
 
@@ -263,10 +280,9 @@ const ME_QUERY = `
 
 const Login = ({ classes }) => {
   const onSuccess = async googleUser => {
-
     // ...
 
-    const client = new GraphQLClient('http://localhost:4000/graphql', {
+    const client = new GraphQLClient("http://localhost:4000/graphql", {
       headers: { authorization: id_token }
     });
     const data = await client.request(ME_QUERY);
@@ -275,17 +291,16 @@ const Login = ({ classes }) => {
 
   // ...
 };
-
 ```
 
 server.js
+
 ```javascript
-const { findOrCreateUser } = require('./controllers/userController');
+const { findOrCreateUser } = require("./controllers/userController");
 
 const server = new ApolloServer({
-  
   // ...
-  
+
   context: async ({ req }) => {
     let authToken = null;
     let currentUser = null;
@@ -306,9 +321,10 @@ const server = new ApolloServer({
 Create a new file userController.js under the folder controllers
 
 userController.js
+
 ```javascript
-const User = require('../models/User');
-const { OAuth2Client } = require('google-auth-library');
+const User = require("../models/User");
+const { OAuth2Client } = require("google-auth-library");
 
 const client = new OAuth2Client(process.env.OAUTH_CLIENT_ID);
 
@@ -319,7 +335,7 @@ exports.findOrCreateUser = async token => {
   const user = await checkIfUserExists(googleUser.email);
   // if user exists,return them; otherwise, create a new user
   return user ? user : createNewUser(googleUser);
-}
+};
 
 const verifyAuthToken = async token => {
   try {
@@ -329,7 +345,7 @@ const verifyAuthToken = async token => {
     });
     return ticket.getPayload();
   } catch (err) {
-    console.error('Error verifying auth token', err);
+    console.error("Error verifying auth token", err);
   }
 };
 
@@ -339,21 +355,22 @@ const createNewUser = googleUser => {
   const { name, email, picture } = googleUser;
   const user = { name, email, picture };
   return new User(user).save(); // Add a new User to database
-}
+};
 ```
 
 resolvers.js
+
 ```javascript
-const { AuthenticationError } = require('apollo-server');
+const { AuthenticationError } = require("apollo-server");
 
 // ...
 
 const authenticated = next => (root, args, ctx, info) => {
   if (!ctx.currentUser) {
-    throw new AuthenticationError('You must be logged in.')
+    throw new AuthenticationError("You must be logged in.");
   }
   return next(root, args, ctx, info);
-}
+};
 
 module.exports = {
   Query: {
@@ -369,8 +386,9 @@ module.exports = {
 Create a new file under client/src, called context.js
 
 client/src/context.js
+
 ```javascript
-import { createContext } from 'react';
+import { createContext } from "react";
 
 const Context = createContext({
   currentUser: null
@@ -380,6 +398,7 @@ export default Context;
 ```
 
 client/src/index.js
+
 ```javascript
 import React, { useContext, useReducer } from "react";
 
@@ -410,38 +429,39 @@ const Root = () => {
 Create a new file called reducer.js under client/src
 
 client/src/reducer.js
+
 ```javascript
 const reducer = (state, action) => {
   switch (action.type) {
-    case 'LOGIN_USER':
+    case "LOGIN_USER":
       return {
         ...state,
         currentUser: action.payload
-      }
+      };
     default:
       return state;
   }
-}
+};
 
 export default reducer;
 ```
 
 client/src/component/Auth/Login.js
+
 ```javascript
 import React, { useContext } from "react";
 import Context from "../../context";
 // ...
 
 const Login = ({ classes }) => {
-  
   const { dispatch } = useContext(Context);
 
   const onSuccess = async googleUser => {
     // ...
     dispatch({
-      type: 'LOGIN_USER',
+      type: "LOGIN_USER",
       payload: data.me
-    })
+    });
   };
 
   // ...
@@ -451,9 +471,10 @@ const Login = ({ classes }) => {
 **12. Styling Splash Page / App Cleanup**
 
 Login.js
+
 ```javascript
 const Login = ({ classes }) => {
-  
+
   // ...
 
   return (
@@ -467,7 +488,7 @@ const Login = ({ classes }) => {
       >
         Welcome
       </Typography>
-      
+
       {//...}
 
     </div>
@@ -482,24 +503,25 @@ Move ME_QUERY to src/graphql/queries.js
 **13. Creating Protected Route for App**
 
 reducer.js
+
 ```javascript
 const reducer = (state, action) => {
   switch (action.type) {
     // ...
 
-    case 'IS_LOGGED_IN':
+    case "IS_LOGGED_IN":
       return {
         ...state,
         isAuth: action.payload
-      }
+      };
 
     // ...
   }
-}
-
+};
 ```
 
 context.js
+
 ```javascript
 // ...
 const Context = createContext({
@@ -507,25 +529,26 @@ const Context = createContext({
   isAuth: false
 });
 // ...
-
 ```
 
 Login.js
+
 ```javascript
 const Login = ({ classes }) => {
   // ....
   const onSuccess = async googleUser => {
     // ...
     dispatch({
-      type: 'IS_LOGGED_IN',
+      type: "IS_LOGGED_IN",
       payload: googleUser.isSignedIn
     });
   };
   // ...
-}
+};
 ```
 
 Splash.js
+
 ```javascript
 // ...
 import { Redirect } from "react-router-dom";
@@ -534,7 +557,7 @@ import Context from "../context";
 const Splash = () => {
   const { state } = useContext(Context);
   // If user is logged in, redirect to app page
-  return state.isAuth ? <Redirect to='/' /> : <Login />;
+  return state.isAuth ? <Redirect to="/" /> : <Login />;
 };
 
 // ...
@@ -543,6 +566,7 @@ const Splash = () => {
 Create a new file called ProtectedRoute.js under src folder
 
 ProtectedRoute.js
+
 ```javascript
 import React, { useContext } from "react";
 import { Route } from "react-router-dom";
@@ -552,16 +576,20 @@ import Redirect from "react-router-dom/Redirect";
 const ProtectedRoute = ({ component: Component, ...rest }) => {
   const { state } = useContext(Context);
   return (
-    <Route render={props =>
-      !state.isAuth ? <Redirect to='/login' /> : <Component {...props} />}
-    {...rest} />
+    <Route
+      render={props =>
+        !state.isAuth ? <Redirect to="/login" /> : <Component {...props} />
+      }
+      {...rest}
+    />
   );
-}
+};
 
 export default ProtectedRoute;
 ```
 
 index.js
+
 ```javascript
 const Root = () => {
   // ...
@@ -581,6 +609,20 @@ const Root = () => {
 ## Part 2: Feature
 
 ### Section 6: Building the Header
+
+Change the text on login button
+
+components/Auth/Login.js
+
+```javascript
+...
+<GoogleLogin
+  ...
+  buttonText="Login with Google"
+  ...
+/>
+...
+```
 
 **14. Building Header Component**
 **15. Build Signout Button**
