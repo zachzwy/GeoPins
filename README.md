@@ -610,6 +610,8 @@ const Root = () => {
 
 ### Section 6: Building the Header
 
+**14. Building Header Component**
+
 Change the text on login button
 
 components/Auth/Login.js
@@ -624,7 +626,66 @@ components/Auth/Login.js
 ...
 ```
 
-**14. Building Header Component**
+src/components/Header.js
+
+```javascript
+...
+import Context from "../context.js;
+...
+const Header = ({ classes }) => {
+  // useContext accepts a context object (the value returned from React.createContext)
+  // and returns the current context value for that context.
+  // The current context value is determined by the value prop
+  // of the nearest <MyContext.Provider> above the calling component in the tree.
+  const { state } = useContext(Context);
+  const { currentUser } = state;
+
+  return (
+    <div className={classes.root}>
+      <AppBar position="static">
+        <Toolbar>
+          {/* Title / Logo */}
+          <div className={classes.grow}>
+            <MapIcon className={classes.icon} />
+            <Typography component="h1" variant="h6" color="inherit" noWrap>
+              GeoPins
+            </Typography>
+          </div>
+          {/* Current user info */}
+          <div>
+            {currentUser && (
+              <div className={classes.grow}>
+                <img
+                  className={classes.picture}
+                  src={currentUser.picture}
+                  alt={currentUser.name}
+                />
+                <Typography variant="h5" color="inherit" noWrap>
+                  {currentUser.name}
+                </Typography>
+              </div>
+            )}
+          </div>
+          {/* Sign out button */}
+          <div />
+        </Toolbar>
+      </AppBar>
+    </div>
+  );
+};
+...
+```
+
+src/pages/App.js
+
+```javascript
+import Header from "../components/Header";
+
+const App = () => {
+  return <Header />;
+};
+```
+
 **15. Build Signout Button**
 
 ### Section 7: Building the Map / User Geolocation
