@@ -630,7 +630,7 @@ src/components/Header.js
 
 ```javascript
 // ...
-import Context from "../context.js;
+import Context from "../context.js";
 // ...
 const Header = ({ classes }) => {
   // useContext accepts a context object (the value returned from React.createContext)
