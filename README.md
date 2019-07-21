@@ -688,6 +688,75 @@ const App = () => {
 
 **15. Build Signout Button**
 
+src/components/Header.js
+
+```javascript
+...
+import Signout from "./Auth/Signout";
+...
+<AppBar>
+  <ToolBar>
+    ...
+    <Signout />
+    ...
+  </ToolBar>
+</AppBar>
+...
+```
+
+src/components/Auth/Signout.js
+
+```javascript
+...
+import React, { useContext } from "react";
+import { GoogleLogout } from "react-google-login";
+import Context from "../../context";
+
+const Signout = ({ classes }) => {
+  // Import Context so to use dispatch function
+  const { dispatch } = useContext(Context);
+
+  // When user click signout button, we dispath an action
+  // that's going to clear from our global state
+  const onSignout = () => {
+    dispatch({ type: "SIGNOUT_USER" });
+  };
+
+  return (
+    <GoogleLogout
+      // onLogoutSuccess function will evoke when we click signout
+      onLogoutSuccess={onSignout}
+      // Make our own custom button, so we use render prop here.
+      // One thing about custom button is that we need to
+      // pass onClick prop manually to make logout work
+      render={({ onClick }) => (
+        <span className={classes.root} onClick={onClick}>
+          <Typography variant="body1" className={classes.buttonText}>
+            Signout
+          </Typography>
+          <ExitToAppIcon className={classes.buttonIcon} />
+        </span>
+      )}
+    />
+  );
+};
+```
+
+Add "SIGNOUT_USER" action handler in our reducer function
+
+src/reducer.js
+
+```javascript
+...
+case "SIGNOUT_USER":
+  return {
+    ...state,
+    isAuth: false,
+    currentUser: null
+  };
+...
+```
+
 ### Section 7: Building the Map / User Geolocation
 
 **16. Creating and Styling our Map**

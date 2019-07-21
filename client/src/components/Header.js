@@ -6,6 +6,7 @@ import MapIcon from "@material-ui/icons/Map";
 import Typography from "@material-ui/core/Typography";
 
 import Context from "../context";
+import Signout from "./Auth/Signout";
 
 const Header = ({ classes }) => {
   // useContext accepts a context object (the value returned from React.createContext)
@@ -27,21 +28,20 @@ const Header = ({ classes }) => {
             </Typography>
           </div>
           {/* Current user info */}
-          <div>
-            {currentUser && (
-              <div className={classes.grow}>
-                <img
-                  className={classes.picture}
-                  src={currentUser.picture}
-                  alt={currentUser.name}
-                />
-                <Typography variant="h5" color="inherit" noWrap>
-                  {currentUser.name}
-                </Typography>
-              </div>
-            )}
-          </div>
-          {/* Sign out button */}
+          {currentUser && (
+            <div className={classes.grow}>
+              <img
+                className={classes.picture}
+                src={currentUser.picture}
+                alt={currentUser.name}
+              />
+              <Typography variant="h5" color="inherit" noWrap>
+                {currentUser.name}
+              </Typography>
+            </div>
+          )}
+          {/* Signout button*/}
+          <Signout />
           <div />
         </Toolbar>
       </AppBar>
