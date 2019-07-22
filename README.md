@@ -760,6 +760,56 @@ case "SIGNOUT_USER":
 ### Section 7: Building the Map / User Geolocation
 
 **16. Creating and Styling our Map**
+
+src/pages/App.js
+
+```javascript
+import Header from "../components/Header";
+
+const App = () => {
+  return (
+    <>
+      <Header />
+      <Map />
+    </>
+  );
+};
+```
+
+src/components/Map.js
+
+```javascript
+const Map = ({ classes }) => {
+  const INITIAL_VIEWPORT = {
+    latitude: 37.76,
+    longitude: -122.4376,
+    zoom: 13
+  };
+
+  const [viewport, setViewport] = useState(INITIAL_VIEWPORT);
+
+  return (
+    <div className={classes.root}>
+      <ReactMapGL
+        width="100vw"
+        height="calc(100vh - 64px)"
+        mapStyle="mapbox://styles/mapbox/streets-v9"
+        mapboxApiAccessToken="pk.eyJ1IjoiemFjaHp3eSIsImEiOiJjanczeWZ1aGYxOW05M3pwczRkZ3A1NGJ4In0.BFX8cW_ZygtvgjIvrwhT1g"
+        onViewportChange={newViewport => setViewport(newViewport)}
+        {...viewport}
+      >
+        {/* Navigation control */}
+        <div className={classes.navigationControl}>
+          <NavigationControl
+            onViewportChange={newViewport => setViewport(newViewport)}
+          />
+        </div>
+      </ReactMapGL>
+    </div>
+  );
+};
+```
+
 **17. Placing a Pin at User's Current Position**
 
 ### Section 8: Creating Blog Area / Adding Draft Pins
