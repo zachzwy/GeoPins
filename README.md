@@ -812,6 +812,60 @@ const Map = ({ classes }) => {
 
 **17. Placing a Pin at User's Current Position**
 
+src/components/Map.js
+
+```javascript
+const Map = ({ classes }) => {
+  // ...
+  const [userLocation, setUserLocation] = useState(null);
+
+  const getUserLocation = () => {
+    if ("geolocation" in navigator) {
+      navigator.geolocation.getCurrentPosition(position => {
+        const { latitude, longitude } = position.coords;
+        setViewport({ ...viewport, latitude, longitude });
+        setUserLocation({ latitude, longitude });
+      });
+    }
+  };
+
+  useEffect(() => getUserLocation(), []);
+
+  return (
+    <div className={classes.root}>
+      <ReactMapGL
+      // ...
+      >
+        {/* ... */}
+
+        {/* Pin icon to display user's current location */}
+        {userLocation && (
+          <Marker
+            latitude={userLocation.latitude}
+            longitude={userLocation.longitude}
+            offsetLeft={-19}
+            offsetTop={-37}
+          >
+            <PinIcon size={40} color="red" />
+          </Marker>
+        )}
+      </ReactMapGL>
+    </div>
+  );
+};
+```
+
+src/components/PinIcon.js
+
+```javascript
+import React from "react";
+import PlaceTwoTone from "@material-ui/icons/PlaceTwoTone";
+
+export default ({ size, color, onClick }) => (
+  <PlaceTwoTone onClick={onClick} style={{ fontSize: size, color }} />
+);
+```
+
 ### Section 8: Creating Blog Area / Adding Draft Pins
 
 **18. Adding Draft Pin**
