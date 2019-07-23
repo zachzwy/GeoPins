@@ -869,6 +869,102 @@ export default ({ size, color, onClick }) => (
 ### Section 8: Creating Blog Area / Adding Draft Pins
 
 **18. Adding Draft Pin**
+
+1. Add onClick prop on <ReactMapGL /> and handleClick function on <Map />
+
+src/components/Map.js
+
+```javascript
+// ...
+const handleClick = ({ lngLat, leftButton }) => {
+  if (!leftButton) return;
+};
+// ...
+<ReactMapGL
+  // ...
+  onClick={handleClick}
+>
+```
+
+2. Add draft state to global state (context)
+
+src/context.js
+
+```javascript
+const Context = createContext({
+  // ...
+  draft: null
+});
+```
+
+3. Bring context to Map component
+
+src/components/Map.js
+
+```javascript
+// ...
+import Context from "../context";
+// ...
+```
+
+4. CREATE_DRAFT and UPDATE_DRAFT_LOCATION reducer
+
+src/reducer.js
+
+```javascript
+case "CREATE_DRAFT":
+  return {
+    ...state,
+    draft: {
+      latitude: 0,
+      longitude: 0
+    }
+  };
+case "UPDATE_DRAFT_LOCATION":
+  return {
+    ...state,
+    draft: action.payload
+  };
+```
+
+5. Update handleClick function add draft Marker on Map
+
+src/components/Map.js
+
+```javascript
+const handleClick = ({ lngLat, leftButton }) => {
+  if (!leftButton) return;
+  if (!state.draft) {
+    dispatch({ type: "CREATE_DRAFT" });
+  }
+  dispatch({
+    type: "UPDATE_DRAFT_LOCATION",
+    payload: {
+      latitude: lngLat[1],
+      longitude: lngLat[0]
+    }
+  });
+};
+
+// ...
+
+{
+  /* Draft pin */
+}
+{
+  state.draft && (
+    <Marker
+      latitude={state.draft.latitude}
+      longitude={state.draft.longitude}
+      offsetLeft={-19}
+      offsetTop={-37}
+    >
+      <PinIcon size={40} color="hotpink" />
+    </Marker>
+  );
+}
+```
+
 **19. Adding Blog Area for Pin Content**
 **20. Building / Styling Blog Components**
 **21. Managing Pin Content State and Deleting Draft Pins**

@@ -1,10 +1,11 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import ReactMapGL, { NavigationControl, Marker } from "react-map-gl";
 import { withStyles } from "@material-ui/core/styles";
 // import Button from "@material-ui/core/Button";
 // import Typography from "@material-ui/core/Typography";
 // import DeleteIcon from "@material-ui/icons/DeleteTwoTone";
 import PinIcon from "./PinIcon";
+import Context from "../context";
 
 const INITIAL_VIEWPORT = {
   latitude: 37.76,
@@ -15,6 +16,7 @@ const INITIAL_VIEWPORT = {
 const Map = ({ classes }) => {
   const [viewport, setViewport] = useState(INITIAL_VIEWPORT);
   const [userLocation, setUserLocation] = useState(null);
+  const { state, dispatch } = useContext(Context);
 
   const getUserLocation = () => {
     if ("geolocation" in navigator) {
@@ -28,6 +30,20 @@ const Map = ({ classes }) => {
 
   useEffect(() => getUserLocation(), []);
 
+  const handleClick = ({ lngLat, leftButton }) => {
+    if (!leftButton) return;
+    if (!state.draft) {
+      dispatch({ type: "CREATE_DRAFT" });
+    }
+    dispatch({
+      type: "UPDATE_DRAFT_LOCATION",
+      payload: {
+        latitude: lngLat[1],
+        longitude: lngLat[0]
+      }
+    });
+  };
+
   return (
     <div className={classes.root}>
       <ReactMapGL
@@ -36,6 +52,7 @@ const Map = ({ classes }) => {
         mapStyle="mapbox://styles/mapbox/streets-v9"
         mapboxApiAccessToken="pk.eyJ1IjoiemFjaHp3eSIsImEiOiJjanczeWZ1aGYxOW05M3pwczRkZ3A1NGJ4In0.BFX8cW_ZygtvgjIvrwhT1g"
         onViewportChange={newViewport => setViewport(newViewport)}
+        onClick={handleClick}
         {...viewport}
       >
         {/* Navigation control */}
@@ -54,6 +71,18 @@ const Map = ({ classes }) => {
             offsetTop={-37}
           >
             <PinIcon size={40} color="red" />
+          </Marker>
+        )}
+
+        {/* Draft pin */}
+        {state.draft && (
+          <Marker
+            latitude={state.draft.latitude}
+            longitude={state.draft.longitude}
+            offsetLeft={-19}
+            offsetTop={-37}
+          >
+            <PinIcon size={40} color="hotpink" />
           </Marker>
         )}
       </ReactMapGL>
