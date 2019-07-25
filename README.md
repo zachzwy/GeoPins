@@ -966,7 +966,134 @@ const handleClick = ({ lngLat, leftButton }) => {
 ```
 
 **19. Adding Blog Area for Pin Content**
+
+1. Add Blog component to Map component under ReactMapGl component
+
+src/components/Map.js
+
+```javascript
+// ...
+{
+  /* Blog area */
+}
+<Blog />;
+// ...
+```
+
+2. Import Context and Set up NoContent, CreatePin, PinContent component inside Blog component
+
+src/components/Blog.js
+
+```javascript
+const Blog = ({ classes }) => {
+  const { state } = useContext(Context);
+  const { draft } = state;
+
+  let BlogContext;
+  if (!draft) {
+    BlogContext = NoContent;
+  } else {
+    BlogContext = CreatePin;
+  }
+  return (
+    <Paper className={classes.root}>
+      <BlogContext />
+    </Paper>
+  );
+};
+```
+
 **20. Building / Styling Blog Components**
+
+1. Styling NoContent component
+
+src/components/Pin/NoContent.js
+
+```javascript
+// ...
+
+const NoContent = ({ classes }) => (
+  <div className={classes.root}>
+    <ExploreIcon className={classes.icon} />
+    <Typography
+      noWrap
+      component="h2"
+      variant="h6"
+      align="center"
+      color="textPrimary"
+      gutterBottom
+    >
+      Click on the map to add a pin
+    </Typography>
+  </div>
+);
+
+// ...
+```
+
+2. Editing CreatePin component
+
+src/components/Pin/CreatePin.js
+
+```javascript
+// ...
+
+const CreatePin = ({ classes }) => (
+  <form className={classes.form}>
+    <Typography
+      className={classes.alignCenter}
+      component="h2"
+      variant="h4"
+      color="secondary"
+    >
+      <LandscapeIcon className={classes.iconLarge} /> Pin Location
+    </Typography>
+    <div>
+      <TextField name="title" label="Title" placeholder="Insert pin title" />
+      <input
+        accept="image/*"
+        id="image"
+        type="file"
+        className={classes.input}
+      />
+      <label htmlFor="image">
+        <Button component="span" size="small" className={classes.button}>
+          <AddAPhotoIcon />
+        </Button>
+      </label>
+    </div>
+    <div className={classes.contentField}>
+      <TextField
+        name="content"
+        label="Content"
+        multiline
+        rows="6"
+        margin="normal"
+        fullWidth
+        variant="outlined"
+      />
+    </div>
+    <div>
+      <Button className={classes.button} variant="contained" color="primary">
+        <ClearIcon className={classes.leftIcon} />
+        Discard
+      </Button>
+      <Button
+        type="submit"
+        className={classes.button}
+        variant="contained"
+        color="secondary"
+      >
+        Submit
+        <SaveIcon className={classes.rightIcon} />
+      </Button>
+    </div>
+  </form>
+);
+
+// ...
+```
+
 **21. Managing Pin Content State and Deleting Draft Pins**
 
 ### Section 9: Image Uploads with Cloudinary Web API
