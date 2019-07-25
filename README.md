@@ -1098,7 +1098,7 @@ const CreatePin = ({ classes }) => (
 
 1. Add three states: title, image, content
 
-src/components/pin/CreatePin.js
+src/components/Pin/CreatePin.js
 
 ```javascript
 // ...
@@ -1147,7 +1147,7 @@ const handleSubmit = e => {
 
 2. Allow user to discard and submit pin
 
-src/components/pin/CreatePin.js
+src/components/Pin/CreatePin.js
 
 ```javascript
 // ...
@@ -1180,6 +1180,32 @@ const handleDeleteDraft = () => {
 ### Section 9: Image Uploads with Cloudinary Web API
 
 **22. Uploading Images with Cloudinary**
+
+1. Signup an free account on Cloudinary, use familiar cloud name, add unsigned upload
+
+2. handleImageUpload
+
+src/components/Pin/CreatePin.js
+
+```javascript
+// ...
+
+import axios from "axios";
+
+// ...
+
+const handleImageUpload = async () => {
+  const data = new FormData();
+  data.append("file", image);
+  data.append("upload_preset", "geopins");
+  data.append("cloud_name", "wenyuzhang");
+  const res = await axios.post(
+    "https://api.cloudinary.com/v1_1/wenyuzhang/image/upload",
+    data
+  );
+  return res.data.url;
+};
+```
 
 ## Part 3: More Feature
 
