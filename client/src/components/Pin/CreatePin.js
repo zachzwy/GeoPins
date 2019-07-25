@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useContext } from "react";
 import { withStyles } from "@material-ui/core/styles";
 import TextField from "@material-ui/core/TextField";
 import Typography from "@material-ui/core/Typography";
@@ -8,58 +8,98 @@ import LandscapeIcon from "@material-ui/icons/LandscapeOutlined";
 import ClearIcon from "@material-ui/icons/Clear";
 import SaveIcon from "@material-ui/icons/SaveTwoTone";
 
-const CreatePin = ({ classes }) => (
-  <form className={classes.form}>
-    <Typography
-      className={classes.alignCenter}
-      component="h2"
-      variant="h4"
-      color="secondary"
-    >
-      <LandscapeIcon className={classes.iconLarge} /> Pin Location
-    </Typography>
-    <div>
-      <TextField name="title" label="Title" placeholder="Insert pin title" />
-      <input
-        accept="image/*"
-        id="image"
-        type="file"
-        className={classes.input}
-      />
-      <label htmlFor="image">
-        <Button component="span" size="small" className={classes.button}>
-          <AddAPhotoIcon />
-        </Button>
-      </label>
-    </div>
-    <div className={classes.contentField}>
-      <TextField
-        name="content"
-        label="Content"
-        multiline
-        rows="6"
-        margin="normal"
-        fullWidth
-        variant="outlined"
-      />
-    </div>
-    <div>
-      <Button className={classes.button} variant="contained" color="primary">
-        <ClearIcon className={classes.leftIcon} />
-        Discard
-      </Button>
-      <Button
-        type="submit"
-        className={classes.button}
-        variant="contained"
+import Content from "../../context";
+
+const CreatePin = ({ classes }) => {
+  const { dispatch } = useContext(Content);
+  const [title, setTitle] = useState("");
+  const [image, setImage] = useState("");
+  const [content, setContent] = useState("");
+
+  const handleDeleteDraft = () => {
+    setTitle("");
+    setImage("");
+    setContent("");
+    dispatch({ type: "DELETE_DRAFT" });
+  };
+
+  const handleSubmit = e => {
+    e.preventDefault();
+    console.log({ title, image, content });
+  };
+
+  return (
+    <form className={classes.form}>
+      <Typography
+        className={classes.alignCenter}
+        component="h2"
+        variant="h4"
         color="secondary"
       >
-        Submit
-        <SaveIcon className={classes.rightIcon} />
-      </Button>
-    </div>
-  </form>
-);
+        <LandscapeIcon className={classes.iconLarge} /> Pin Location
+      </Typography>
+      <div>
+        <TextField
+          name="title"
+          label="Title"
+          placeholder="Insert pin title"
+          onChange={e => setTitle(e.target.value)}
+        />
+        <input
+          accept="image/*"
+          id="image"
+          type="file"
+          className={classes.input}
+          onChange={e => setImage(e.target.files[0])}
+        />
+        <label htmlFor="image">
+          <Button
+            component="span"
+            size="small"
+            className={classes.button}
+            style={{ color: image && "green" }}
+          >
+            <AddAPhotoIcon />
+          </Button>
+        </label>
+      </div>
+      <div className={classes.contentField}>
+        <TextField
+          name="content"
+          label="Content"
+          multiline
+          rows="6"
+          margin="normal"
+          fullWidth
+          variant="outlined"
+          onChange={e => setContent(e.target.value)}
+        />
+      </div>
+      <div>
+        <Button
+          className={classes.button}
+          variant="contained"
+          color="primary"
+          onClick={handleDeleteDraft}
+        >
+          <ClearIcon className={classes.leftIcon} />
+          Discard
+        </Button>
+        <Button
+          type="submit"
+          className={classes.button}
+          variant="contained"
+          color="secondary"
+          disabled={!title.trim() || !image || !content.trim()}
+          onClick={handleSubmit}
+        >
+          Submit
+          <SaveIcon className={classes.rightIcon} />
+        </Button>
+      </div>
+    </form>
+  );
+};
 
 const styles = theme => ({
   form: {

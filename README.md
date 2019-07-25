@@ -1096,6 +1096,87 @@ const CreatePin = ({ classes }) => (
 
 **21. Managing Pin Content State and Deleting Draft Pins**
 
+1. Add three states: title, image, content
+
+src/components/pin/CreatePin.js
+
+```javascript
+// ...
+
+const [title, setTitle] = useState("");
+const [image, setImage] = useState("");
+const [content, setContent] = useState("");
+
+const handleSubmit = e => {
+  e.preventDefault();
+  console.log({ title, image, content });
+};
+
+// ...
+
+<TextField
+  // ...
+  onChange={e => setTitle(e.target.value)}
+/>
+
+// ...
+
+<input
+  // ...
+  onChange={e => setImage(e.target.files[0])}
+/>
+
+// ...
+
+<TextField
+  // ...
+  onChange={e => setContent(e.target.value)}
+/>
+
+// ...
+
+<Button
+  // ...
+  disabled={!title.trim() || !image || !content.trim()}
+  onClick={handleSubmit}
+/>
+
+// ...
+
+```
+
+2. Allow user to discard and submit pin
+
+src/components/pin/CreatePin.js
+
+```javascript
+// ...
+
+import Content from "../../context";
+
+// ...
+
+const { dispatch } = useContext(Content);
+
+// ...
+
+const handleDeleteDraft = () => {
+  setTitle("");
+  setImage("");
+  setContent("");
+  dispatch({ type: "DELETE_DRAFT" });
+};
+
+// ...
+
+<Button
+  // ...
+  onClick={handleDeleteDraft}
+/>;
+
+// ...
+```
+
 ### Section 9: Image Uploads with Cloudinary Web API
 
 **22. Uploading Images with Cloudinary**
