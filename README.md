@@ -1213,9 +1213,148 @@ const handleImageUpload = async () => {
 
 **23. Creating New Pins with CREATE_PIN Mutation**
 
+1. Add Mutation in typeDefs.js
+
+typeDefs.js
+
+```javascript
+module.exports = gql`
+  input CreatePinInput {
+    title: String
+    image: String
+    content: String
+    latitude: Float
+    longitude: Float
+  }
+
+  type Mutation {
+    createPin(input: CreatePinInput!): Pin
+  }
+`;
+```
+
+2. Update resolvers
+
+resolvers.js
+
+```javascript
+module.exports = {
+  Query: {
+    me: authenticated((root, args, ctx) => ctx.currentUser)
+  },
+  Mutation: {
+    createPin: authenticated(async (root, args, ctx) => {
+      const newPin = await new Pin({
+        ...args.input,
+        author: ctx.currentUser._id
+      }).save();
+      const pinAdded = await Pin.populate(newPin, "author");
+      return pinAdded;
+    })
+  }
+};
+```
+
+3. src/graphql/mutation.js
+
+```javascript
+export const CREATE_PIN_MUTATION = `
+  mutation($title: String!, $image: String!, $content: String!, $latitude: Float!, $longitude: Float!) {
+    createPin(input: {
+      title: $title,
+      image: $image,
+      content: $content,
+      latitude: $latitude,
+      longitude: $longitude
+    }) {
+      _id
+      createdAt
+      title
+      image
+      content
+      latitude
+      longitude
+      author {
+        _id
+        name
+        email
+        picture
+      }
+    }
+  }
+`;
+```
+
+4. CreatePin.js
+
+src/components/Pin/CreatePin.js
+
+```javascript
+const handleSubmit = async e => {
+  try {
+    e.preventDefault();
+    setSubmitting(true);
+    const idToken = window.gapi.auth2
+      .getAuthInstance()
+      .currentUser.get()
+      .getAuthResponse().id_token;
+    const client = new GraphQLClient("http://localhost:4000/graphql", {
+      headers: { authorization: idToken }
+    });
+    const url = await handleImageUpload();
+    const { latitude, longitude } = state.draft;
+    const variables = {
+      title,
+      image: url,
+      content,
+      latitude,
+      longitude
+    };
+    const { createPin } = await client.request(CREATE_PIN_MUTATION, variables);
+    handleDeleteDraft();
+    console.log("Pin created ", { createPin });
+  } catch (err) {
+    setSubmitting(false);
+    console.error("Error createing pin ", err);
+  }
+};
+```
+
 ### Section 11: Making Costom useClient Hook
 
 **24. Create Costom GraphQL Request Hook**
+
+1. Create a new file
+
+src/client.js
+
+```javascript
+import { useState, useEffect } from "react";
+import { GraphQLClient } from "graphql-request";
+
+export const BASE_URL =
+  process.env.NODE_ENV === "production"
+    ? "<insert-production-url>"
+    : "http://localhost:4000/graphql";
+
+export const useClient = () => {
+  const [idToken, setIdToken] = useState("");
+
+  useEffect(() => {
+    const token = window.gapi.auth2
+      .getAuthInstance()
+      .currentUser.get()
+      .getAuthResponse().id_token;
+    setIdToken(token);
+  }, []);
+
+  return new GraphQLClient(BASE_URL, {
+    headers: { authorization: idToken }
+  });
+};
+```
+
+2. Also update CreatePin.js and Login.js
 
 ### Section 12: Getting / Displaying Created Pins
 
