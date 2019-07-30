@@ -1360,6 +1360,80 @@ export const useClient = () => {
 
 **25. Displaying Created Pins on the Map**
 
+Now that we've created a couple of pins on our map, we want to fetch those pins and display them.
+
+First, add a new query which we're going to call get pins. This is going to return to us an array of pins, an array of elements of type pin. To ensure that each of these pin elements are not null, we add an exclamation point.
+
+We can require that each of these values are not null but we don't want to make the entire array itself required because it's possible that we don't have any pins within this array and therefore we just want to return an empty array.
+
+typeDefs.js
+
+```javascript
+type Query {
+  me: User
+  getPins: [Pin!]
+}
+```
+
+resolvers.js
+
+```javascript
+getPins: (root, args, ctx) => {
+  // We don't need to add authenticated higher order function to it because we won't need to read from context
+  const pins = await Pin.find({}).populate('author').populate('comments.author');
+  return pins;
+}
+```
+
+So before we take care of figuring out how to execute this get pins query on the client we need create a new piece of state within context.js where our pins array is going to be stored across our application.
+
+context.js
+
+```javascript
+const Context = createContext({
+  // ...
+  pins: []
+});
+```
+
+queries.js
+
+```javascript
+export const GET_PINS_QUERY = `
+{
+  getPins{
+    _id
+    createdAt
+    title
+    image
+    content
+    latitude
+    longitude
+    author {
+      _id
+      name
+      email
+      picture
+    }
+    comments {
+      text
+      createdAt
+      author {
+        _id
+        name
+        picture
+      }
+    }
+  }
+}
+`;
+```
+
+Map.js
+
+```javascript
+```
+
 ### Section 13: Popups and Highlighting New Pins
 
 **26. Highlighting Newly Created Pins**
