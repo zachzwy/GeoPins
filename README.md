@@ -1530,6 +1530,84 @@ const highlightNewPin = pin => {
 
 **27. Adding Popup to our Pins**
 
+Map.js
+
+```javascript
+import { Popup } from "react-map-gl";
+
+const [popup, setPopup] = useState(null);
+
+const handleSelectPin = pin => {
+  setPopup(pin);
+  dispatch({ type: "SET_PIN", payload: pin });
+};
+
+const isAuthUser = () => state.currentUser._id === popup.author._id;
+
+{
+  /* Created Pins */
+}
+
+{
+  state.pins.map(pin => (
+    <Marker>
+      <PinIcon onClick={() => handleSelectPin(pin)} />
+    </Marker>
+  ));
+}
+
+{
+  /* Popup area for creating pins */
+}
+{
+  popup && (
+    <Popup
+      anchor="top"
+      latitude={popup.latitude}
+      longitude={popup.longitude}
+      closeOnClick={false}
+      onClose={() => setPopup(null)}
+    >
+      <img className={classes.popupImage} src={popup.image} alt={popup.title} />
+      <div className={classes.popupTab}>
+        <Typography>
+          {popup.latitude.toFixed(6)}, {popup.longitude.toFixed(6)}
+        </Typography>
+        {isAuthUser() && (
+          <Button>
+            <DeleteIcon className={classes.DeleteIcon} />
+          </Button>
+        )}
+      </div>
+    </Popup>
+  );
+}
+```
+
+context.js
+
+```javascript
+const Context = createContext({
+  currentPin: null
+});
+```
+
+reducer.js
+
+```javascript
+case "SET_PIN":
+  return {
+    ...state,
+    currentPin: action.payload,
+    draft: null
+  };
+
+case "CREATE_DRAFT":
+  return {
+    currentPin: null,
+  };
+```
+
 ### Section 14: Deleting User Pins
 
 **28. Deleting Pins with DELETE_PIN Mutation**
