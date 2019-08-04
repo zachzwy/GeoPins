@@ -2,6 +2,65 @@
 
 \$ npm run dev
 
+## File Structure
+
+GEOPINS
+|
+├── resolvers.js
+├── server.js
+├── typeDefs.js
+│
+├── controllers
+│ . └── userController.js
+|
+├── models
+| . ├── Pin.js
+│ . └── User.js
+|
+├── controllers
+│ . └── userController.js
+|
+├── .env
+├── README.md
+|
+└── client
+. . ├── public
+. . | . └── index.html
+. . |
+. . └── src
+. . . . ├── client.js
+. . . . ├── context.js
+. . . . ├── index.js
+. . . . ├── ProtectedRoute.js
+. . . . ├── reducer.js
+. . . . ├── serviceWorker.js
+. . . . ├── withRoot.js
+. . . . |
+. . . . ├── component
+. . . . | . ├── Blog.js
+. . . . | . ├── Header.js
+. . . . | . ├── Map.js
+. . . . | . ├── PinIcon.js
+. . . . | . |── Auth
+. . . . | . | . ├── Login.js
+. . . . | . | . └── Signout.js
+. . . . | . |── Comment
+. . . . | . | . ├── Comments.js
+. . . . | . | . └── CreateComment.js
+. . . . | . └── Pin
+. . . . | . . . ├── CreatePin.js
+. . . . | . . . ├── NoContent.js
+. . . . | . . . └── PinContent.js
+. . . . |
+. . . . |── graphql
+. . . . | . ├── mutations.js
+. . . . | . ├── queries.js
+. . . . | . └── subscriptions.js
+. . . . |
+. . . . └── pages
+. . . . . . ├── App.js
+. . . . . . └── Splash.js
+
 ## Part 1: Prepare
 
 ### Section 2: Building our GraphQL Server
@@ -1480,3 +1539,7 @@ Map.js
 ### Section 22: BONUS
 
 **38. Bonus Lecture**
+
+```
+
+```
