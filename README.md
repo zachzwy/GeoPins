@@ -1,6 +1,12 @@
 # GeoPins
 
+## How to Use
+
+```
 \$ npm run dev
+\$ cd client
+\$ npm start
+```
 
 ## File Structure
 
@@ -1498,6 +1504,30 @@ Map.js
 ### Section 13: Popups and Highlighting New Pins
 
 **26. Highlighting Newly Created Pins**
+
+Map.js
+
+```javascript
+import differenceInMinutes from "date-fns/difference_in_minutes";
+
+const highlightNewPin = pin => {
+  const isNewPin = differenceInMinutes(Date.now(), Number(pin.createdAt)) <= 30;
+  return isNewPin ? "limegreen" : "darkblue";
+};
+
+{
+  /* Created Pins */
+}
+
+{
+  state.pins.map(pin => (
+    <Marker>
+      <PinIcon color={highlightNewPin(pin)} />
+    </Marker>
+  ));
+}
+```
+
 **27. Adding Popup to our Pins**
 
 ### Section 14: Deleting User Pins
