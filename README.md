@@ -4,6 +4,7 @@
 
 ## File Structure
 
+```
 GEOPINS
 |
 ├── resolvers.js
@@ -60,6 +61,7 @@ GEOPINS
 . . . . └── pages
 . . . . . . ├── App.js
 . . . . . . └── Splash.js
+```
 
 ## Part 1: Prepare
 
