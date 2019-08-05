@@ -1612,6 +1612,71 @@ case "CREATE_DRAFT":
 
 **28. Deleting Pins with DELETE_PIN Mutation**
 
+typeDefs.js
+
+```javascript
+type Mutation {
+  deletePin(pinId: ID!): Pin
+}
+```
+
+resolvers.js
+
+```javascript
+Mutation: {
+  deletePin: authenticated(async (root, args, ctx) => {
+    const pinDeleted = await Pin.findOneAndDelete({ _id: args.pinId }).exec();
+    return pinDeleted;
+  });
+}
+```
+
+mutations.js
+
+```javascript
+export const DELETE_PIN_MUTATION = `
+  mutation($pinId: ID!) {
+    deletePin(pinId: $pinId) {
+      _id
+    }
+  }
+`;
+```
+
+Map.js
+
+```javascript
+import { DELETE_PIN_MUTATION } from "../graphql/mutations";
+
+const handleDeletePin = async pin => {
+  const variable = { pinId: pin._id };
+  const { deletePin } = await client.request(DELETE_PIN_MUTATION, variable);
+  dispatch({ type: "DELETE_PIN", payload: deletePin });
+  setPopup(null);
+};
+
+{
+  isAuthUser() && (
+    <Button onClick={() => handleDeletePin(popup)}>
+      <DeleteIcon className={classes.DeleteIcon} />
+    </Button>
+  );
+}
+```
+
+reducer.js
+
+```javascript
+case "DELETE_PIN":
+  const deletedPin = action.payload;
+  const filteredPins = state.pins.filter(pin => pin._id !== deletedPin._id);
+  return {
+    ...state,
+    pins: filteredPins,
+    currentPin: null
+  };
+```
+
 ### Section 15: Displaying Pin Content
 
 **29. Building Out / Styling Pin Content**
