@@ -3,9 +3,9 @@
 ## How to Use
 
 ```
-\$ npm run dev
-\$ cd client
-\$ npm start
+$ npm run dev
+$ cd client
+$ npm start
 ```
 
 ## File Structure
@@ -1799,6 +1799,128 @@ const Comments = ({ comments, classes }) => (
 ```
 
 **31. Creating Comments with CREATE_COMMENT_MUTATION**
+
+typeDefs.js
+
+```javascript
+type Mutation {
+  createComment(pinId: ID!, text: String!): Pin
+}
+```
+
+resolvers.js
+
+```javascript
+createComment: authenticated(async (root, args, ctx) => {
+  const newComment = { text: args.text, author: ctx.currentUser._id };
+  const pinUpdated = await Pin.findOneAndUpdate(
+    { _id: args.pinId },
+    { $push: { comments: newComment } },
+    { new: true }
+  )
+    .populate("author")
+    .populate("comments.author");
+  return pinUpdated;
+});
+```
+
+mutation.js
+
+```javascript
+export const CREATE_COMMENT_MUTATION = `
+  mutation($pinId: ID!, $text: String!) {
+    createComment(pinId: $pinId, text: $text) {
+      _id
+      createdAt
+      title
+      content
+      image
+      latitude
+      longitude
+      author {
+        _id
+        name
+      }
+      comments {
+        text
+        createdAt
+        author {
+          name
+          picture
+        }
+      }
+    }
+  }
+`;
+```
+
+CreateComments.js
+
+```javascript
+import { useContext } from "react";
+
+import { CREATE_COMMENT_MUTATION } from "../../graphql/mutations";
+import { useClient } from "../../client";
+import Context from "../../context";
+
+const CreateComment = ({ classes }) => {
+  const client = useClient();
+  const { state, dispatch } = useContext(Context);
+  const [comment, setComment] = useState("");
+
+  const handleSubmitComment = async () => {
+    const variables = { pinId: state.currentPin._id, text: comment };
+    const { createComment } = await client.request(
+      CREATE_COMMENT_MUTATION,
+      variables
+    );
+    dispatch({ type: "CREATE_COMMENT", payload: createComment });
+    setComment("");
+  };
+
+  return (
+    <>
+      <form className={classes.form}>
+        <IconButton disabled={!comment.trim()} onClick={() => setComment("")}>
+          <ClearIcon />
+        </IconButton>
+        <InputBase value={comment} onChange={e => setComment(e.target.value)} />
+        <IconButton disabled={!comment.trim()} onClick={handleSubmitComment}>
+          <SendIcon />
+        </IconButton>
+      </form>
+      <Divider />
+    </>
+  );
+};
+```
+
+reducer.js
+
+```javascript
+case "CREATE_COMMENT":
+  const updatedCurrentPin = action.payload;
+  // Find and replace
+  const updatedPins = state.pins.map(pin =>
+    pin._id === updatedCurrentPin._id ? updatedCurrentPin : pin
+  );
+  return {
+    ...state,
+    pins: updatedPins,
+    currentPin: updatedCurrentPin
+  };
+```
+
+Comments.js
+
+```javascript
+import distanceInWordsToNow from "date-fns/distance_in_words_to_now";
+
+{
+  distanceInWordsToNow(comment.createdAt);
+}
+ago;
+```
 
 ## Part 4: Subscription
 
