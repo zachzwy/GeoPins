@@ -1734,6 +1734,70 @@ const PinContent = ({ classes }) => {
 ### Section 16: Add Comment Function ality
 
 **30. Building out Components to Create / Display User Comments**
+
+PinContent.js
+
+```javascript
+import CreateComment from "../Comment/CreateComment";
+import Comments from "../Comment/Comments";
+
+<CreateComment />
+<Comments comments={comments} />
+```
+
+CreateComment.js
+
+```javascript
+const CreateComment = ({ classes }) => {
+  return (
+    <>
+      <form className={classes.form}>
+        <IconButton className={classes.clearButton}>
+          <ClearIcon />
+        </IconButton>
+        <InputBase
+          className={classes.input}
+          placeholder="Add Comment"
+          multiline={true}
+        />
+        <IconButton className={classes.sendButton}>
+          <SendIcon />
+        </IconButton>
+      </form>
+      <Divider />
+    </>
+  );
+};
+```
+
+Comments.js
+
+```javascript
+const Comments = ({ comments, classes }) => (
+  <List className={classes.root}>
+    {comments.map((comment, i) => (
+      <ListItem key={i} alignItems="flex-start">
+        <ListItemAvatar>
+          <Avatar src={comment.author.picture} alt={comment.author.name} />
+        </ListItemAvatar>
+        <ListItemText
+          primary={comment.text}
+          secondary={
+            <Typography
+              className={classes.inline}
+              component="span"
+              color="textPrimary"
+            >
+              {comment.author.name}
+            </Typography>
+          }
+        />
+      </ListItem>
+    ))}
+  </List>
+);
+```
+
 **31. Creating Comments with CREATE_COMMENT_MUTATION**
 
 ## Part 4: Subscription
