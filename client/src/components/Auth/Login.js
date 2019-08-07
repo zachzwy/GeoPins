@@ -11,20 +11,24 @@ const Login = ({ classes }) => {
   const { dispatch } = useContext(Context);
 
   const onSuccess = async googleUser => {
-    const id_token = googleUser.getAuthResponse().id_token;
-    const client = new GraphQLClient(BASE_URL, {
-      // Create a new client
-      headers: { authorization: id_token }
-    });
-    const data = await client.request(ME_QUERY);
-    dispatch({
-      type: "LOGIN_USER",
-      payload: data.me
-    });
-    dispatch({
-      type: "IS_LOGGED_IN",
-      payload: googleUser.isSignedIn
-    });
+    try {
+      const id_token = googleUser.getAuthResponse().id_token;
+      const client = new GraphQLClient(BASE_URL, {
+        // Create a new client
+        headers: { authorization: id_token }
+      });
+      const { me } = await client.request(ME_QUERY);
+      dispatch({
+        type: "LOGIN_USER",
+        payload: me
+      });
+      dispatch({
+        type: "IS_LOGGED_IN",
+        payload: googleUser.isSignedIn()
+      });
+    } catch (err) {
+      onFailure(err);
+    }
   };
 
   const onFailure = err => {

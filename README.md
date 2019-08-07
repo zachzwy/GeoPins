@@ -2005,6 +2005,112 @@ const client = new ApolloClient({
 
 **34. Subscribing to Live Data Changes with Apollo Client**
 
+Map.js
+
+```javascript
+import { Subscription } from "react-apollo";
+
+import {
+  PIN_ADDED_SUBSCRIPTION,
+  PIN_UPDATED_SUBSCTIPTION,
+  PIN_DELETED_SUBSCRIPTION
+} from "../graphql/subscriptions";
+
+{/* Subscriptions for Creating / Updating / Deleting Pins */}
+      <Subscription
+        subscription={PIN_ADDED_SUBSCRIPTION}
+        onSubscriptionData={({ subscriptionData }) => {
+          const { pinAdded } = subscriptionData.data;
+          console.log({ pinAdded });
+          dispatch({ type: "CREATE_PIN", payload: pinAdded });
+        }}
+      />
+      <Subscription
+        subscription={PIN_UPDATED_SUBSCTIPTION}
+        onSubscriptionData={({ subscriptionData }) => {
+          const { pinUpdated } = subscriptionData.data;
+          console.log({ pinUpdated });
+          dispatch({ type: "CREATE_COMMENT", payload: pinUpdated });
+        }}
+      />
+      <Subscription
+        subscription={PIN_DELETED_SUBSCRIPTION}
+        onSubscriptionData={({ subscriptionData }) => {
+          const { pinDeleted } = subscriptionData.data;
+          console.log({ pinDeleted });
+          dispatch({ type: "DELETE_PIN", payload: pinDeleted });
+        }}
+      />
+```
+
+subscriptions.js
+
+```javascript
+import gql from "graphql-tag";
+
+export const PIN_ADDED_SUBSCRIPTION = gql`
+  subscription {
+    pinAdded {
+      _id
+      createdAt
+      title
+      image
+      content
+      latitude
+      longitude
+      author {
+        _id
+        name
+        email
+        picture
+      }
+      comments {
+        text
+        createdAt
+        author {
+          name
+          picture
+        }
+      }
+    }
+  }
+`;
+
+export const PIN_UPDATED_SUBSCTIPTION = gql`
+  subscription {
+    pinUpdated {
+      _id
+      createdAt
+      title
+      content
+      image
+      latitude
+      longitude
+      author {
+        _id
+        name
+      }
+      comments {
+        text
+        createdAt
+        author {
+          name
+          picture
+        }
+      }
+    }
+  }
+`;
+
+export const PIN_DELETED_SUBSCRIPTION = gql`
+  subscription {
+    pinDeleted {
+      _id
+    }
+  }
+`;
+```
+
 ## Part 5: Styling
 
 ### Section 19: Styling our App for Mobile / useMediaQuery
