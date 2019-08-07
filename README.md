@@ -1928,9 +1928,81 @@ ago;
 
 **32. Hanlding Expired Auth Token Errors**
 
+Login.js
+
+```javascript
+const onFailure = err => {
+  dispatch({ type: "IS_LOGGED_IN", payload: false });
+};
+```
+
 ### Section 18: Live Data with GraphQL Subscriptions / Apollo Client
 
 **33. Setting up Subscriptions on the Backend**
+
+typeDefs.js
+
+```javascript
+type Subscription {
+  pinAdded: Pin
+  pinDeleted: Pin
+  pinUpdated: Pin
+}
+```
+
+resolvers.js
+
+```javascript
+const { AuthenticationError, PubSub } = require("apollo-server");
+
+const pubsub = new PubSub();
+const PIN_ADDED = "PIN_ADDED";
+const PIN_DELETED = "PIN_DELETED";
+const PIN_UPDATED = "PIN_UPDATED";
+
+pubsub.publish(PIN_ADDED, { pinAdded });
+
+pubsub.publish(PIN_DELETED, { pinDeleted });
+
+pubsub.publish(PIN_UPDATED, { pinUpdated });
+
+Subscription: {
+  pinAdded: {
+    subscribe: () => pubsub.asyncIterator(PIN_ADDED)
+  },
+  pinDeleted: {
+    subscribe: () => pubsub.asyncIterator(PIN_DELETED)
+  },
+  pinUpdated: {
+    subscribe: () => pubsub.asyncIterator(PIN_UPDATED)
+  }
+```
+
+index.js
+
+```javascript
+import { ApolloProvider } from "react-apollo";
+import { ApolloClient } from "apollo-client";
+import { WebSocketLink } from "apollo-link-ws";
+import { InMemoryCache } from "apollo-cache-inmemory";
+
+const wsLink = new WebSocketLink({
+  uri: "ws://localhost:4000/graphql",
+  options: {
+    reconnect: true
+  }
+});
+
+const client = new ApolloClient({
+  link: wsLink,
+  cache: new InMemoryCache()
+});
+
+<Router>
+  <ApolloProvider client={client}>...</ApolloProvider>
+</Router>;
+```
+
 **34. Subscribing to Live Data Changes with Apollo Client**
 
 ## Part 5: Styling

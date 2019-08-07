@@ -10,6 +10,23 @@ import reducer from "./reducer";
 import * as serviceWorker from "./serviceWorker";
 import ProtectedRoute from "./ProtectedRoute";
 
+import { ApolloProvider } from "react-apollo";
+import { ApolloClient } from "apollo-client";
+import { WebSocketLink } from "apollo-link-ws";
+import { InMemoryCache } from "apollo-cache-inmemory";
+
+const wsLink = new WebSocketLink({
+  uri: "ws://localhost:4000/graphql",
+  options: {
+    reconnect: true
+  }
+});
+
+const client = new ApolloClient({
+  link: wsLink,
+  cache: new InMemoryCache()
+});
+
 const Root = () => {
   // useContext accepts a context object (the value returned from React.createContext)
   // and returns the current context value for that context.
@@ -25,12 +42,14 @@ const Root = () => {
 
   return (
     <Router>
-      <Context.Provider value={{ state, dispatch }}>
-        <Switch>
-          <ProtectedRoute exact path="/" component={App} />
-          <Route path="/login" component={Splash} />
-        </Switch>
-      </Context.Provider>
+      <ApolloProvider client={client}>
+        <Context.Provider value={{ state, dispatch }}>
+          <Switch>
+            <ProtectedRoute exact path="/" component={App} />
+            <Route path="/login" component={Splash} />
+          </Switch>
+        </Context.Provider>
+      </ApolloProvider>
     </Router>
   );
 };
